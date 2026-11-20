@@ -4,138 +4,180 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>매출 대시보드 2026</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<!-- 디자인 시스템: KSECRET BCM1 (Pretendard, 블루 한 계열, 28px 모서리, 그림자 없음) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
-    --bg: #f6f7f9; --surface: #ffffff; --border: #e3e6ea; --text: #1d2228; --muted: #69727d;
-    --accent: #2f6fdb; --accent-soft: #e6eefc; --grid: #edf0f3;
-    --c1: #2f6fdb; --c2: #e07b39; --c3: #2a9d78; --c4: #9b59b6; --c5: #d64a6b;
-    --heat: 47, 111, 219;
+    /* color tokens */
+    --gallery-white: #ffffff; --studio-mist: #f5f5f7; --paper-frost: #fafafc;
+    --hairline-silver: #d6d6d6; --control-gray: #e6e6e8;
+    --ink: #1d1d1f; --slate: #707070; --steel: #86868b;
+    --link-blue: #0066cc; --action-blue: #0071e3; --on-action-blue: #ffffff; --launch-blue: #004d99;
+    /* 차트 계열색: 블루 한 계열을 명도 차이로 나누고, 다섯 번째는 steel 회색 */
+    --series-1: #003e7a; --series-2: #0071e3; --series-3: #5ea4f0; --series-4: #a8cdf7; --series-5: #86868b;
+    --heat-rgb: 0, 113, 227;
+    /* type */
+    --font-sans: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+    /* spacing */
+    --spacing-4: 4px; --spacing-8: 8px; --spacing-12: 12px; --spacing-16: 16px; --spacing-20: 20px;
+    --spacing-24: 24px; --spacing-32: 32px; --spacing-40: 40px; --spacing-64: 64px;
+    --section-gap: 90px; --card-padding: 28px; --element-gap: 20px;
+    /* radius */
+    --radius-cards: 28px; --radius-links: 10px; --radius-buttons: 9999px; --radius-pills: 36px;
+    /* outlines (그림자 아님, 1px 선) */
+    --shadow-subtle: 0px 0px 0px 1px #e6e6e8; --shadow-subtle-2: 0px 0px 0px 1px #86868b;
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #121519; --surface: #1b1f25; --border: #2c323a; --text: #e8ebef; --muted: #98a1ac;
-      --accent: #6c9cf0; --accent-soft: #23314a; --grid: #262b32;
-      --c1: #6c9cf0; --c2: #f0a06a; --c3: #4fc39c; --c4: #b98bd0; --c5: #ec7891;
-      --heat: 108, 156, 240;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #121519; --surface: #1b1f25; --border: #2c323a; --text: #e8ebef; --muted: #98a1ac;
-    --accent: #6c9cf0; --accent-soft: #23314a; --grid: #262b32;
-    --c1: #6c9cf0; --c2: #f0a06a; --c3: #4fc39c; --c4: #b98bd0; --c5: #ec7891;
-    --heat: 108, 156, 240;
-  }
+
+  /* type styles */
+  .product-kicker { font-size: 21px; line-height: 1; font-weight: 600; letter-spacing: 0.231px; }
+  .feature-heading { font-size: 40px; line-height: 1; font-weight: 600; letter-spacing: 0; }
+  .feature-title { font-size: 24px; line-height: 1.17; font-weight: 600; }
+  .body { font-size: 17px; line-height: 1.47; font-weight: 400; letter-spacing: -0.374px; }
+  .body-small { font-size: 14px; line-height: 1.29; font-weight: 400; letter-spacing: -0.224px; }
+  .callout-price { font-size: 14px; line-height: 1.29; font-weight: 600; letter-spacing: -0.224px; }
+  .compact-control { font-size: 12px; line-height: 1.33; font-weight: 400; letter-spacing: -0.12px; }
+  .status-label { font-size: 12px; line-height: 16px; font-weight: 600; letter-spacing: -0.12px; }
+
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--text);
-    font-family: "Noto Sans KR", system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 14px; line-height: 1.5; }
-  .wrap { max-width: 1200px; margin: 0 auto; padding: 24px 16px 48px; }
-  header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-  h1 { font-size: 22px; margin: 0; }
-  .sub { color: var(--muted); font-size: 13px; }
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
-  .filters { display: grid; gap: 10px; margin-bottom: 16px; }
-  .frow { display: flex; gap: 8px; align-items: flex-start; }
-  .flabel { flex: 0 0 40px; font-weight: 700; padding-top: 5px; color: var(--muted); font-size: 13px; }
-  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
-  .chip { border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px;
-    padding: 4px 12px; font: inherit; font-size: 13px; cursor: pointer; }
-  .chip:hover { border-color: var(--accent); }
-  .chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .chip.all.on { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
-  .reset { margin-left: auto; }
-  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
-  .kpi .k { color: var(--muted); font-size: 13px; }
-  .kpi .v { font-size: 24px; font-weight: 700; margin-top: 2px; font-variant-numeric: tabular-nums; }
-  .kpi .d { font-size: 12px; color: var(--muted); }
-  .grid2 { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 12px; }
-  .grid2b { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-  .ctitle { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
-  .ctitle h2 { font-size: 15px; margin: 0; }
-  .hint { color: var(--muted); font-size: 12px; }
-  .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-  .seg button { border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 12px; padding: 3px 10px; cursor: pointer; }
-  .seg button.on { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+  body {
+    margin: 0; font-family: var(--font-sans); background: var(--studio-mist); color: var(--ink);
+    -webkit-font-smoothing: antialiased; word-break: keep-all; overflow-wrap: break-word;
+  }
+
+  /* 상단: 흰 스토리 섹션 */
+  .top { background: var(--gallery-white); border-bottom: 1px solid var(--hairline-silver); }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 var(--spacing-24); }
+  .hero { padding: var(--spacing-64) 0 var(--spacing-40); }
+  .hero .product-kicker { margin: 0; color: var(--ink); }
+  .hero h1 { margin: var(--spacing-12) 0 0; }
+  .hero p { margin: var(--spacing-16) 0 0; color: var(--slate); }
+
+  .filters { display: grid; gap: var(--spacing-12); padding-bottom: var(--spacing-32); }
+  .frow { display: flex; gap: var(--spacing-16); align-items: flex-start; }
+  .flabel { flex: 0 0 36px; padding-top: 5px; color: var(--slate); }
+  .chips { display: flex; flex-wrap: wrap; gap: var(--spacing-8); }
+  .toolbar { display: flex; justify-content: flex-end; }
+
+  /* OutlinedPill · ActionPill */
+  .kb-pill {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: var(--spacing-4) var(--spacing-12);
+    border: 1px solid transparent; border-radius: var(--radius-buttons);
+    background: transparent; color: var(--ink);
+    font-family: inherit; white-space: nowrap; cursor: pointer;
+  }
+  .kb-pill--outlined { border-color: var(--steel); }
+  .kb-pill--action { background: var(--action-blue); border-color: var(--action-blue); color: var(--on-action-blue); }
+  .kb-pill:focus-visible, .kb-link:focus-visible, td.cell:focus-visible, th:focus-visible {
+    outline: 2px solid var(--action-blue); outline-offset: 2px;
+  }
+  .kb-link { color: var(--link-blue); background: none; border: 0; padding: 0; font-family: inherit; cursor: pointer; border-radius: var(--radius-links); }
+  .kb-link:hover { text-decoration: underline; }
+
+  /* 본문: studio-mist 밴드 위 gallery-white 카드 */
+  main { padding: var(--spacing-40) 0 var(--section-gap); }
+  .card { background: var(--gallery-white); border-radius: var(--radius-cards); padding: var(--card-padding); }
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--element-gap); margin-bottom: var(--element-gap); }
+  .kpi .k { color: var(--slate); margin: 0; }
+  .kpi .v { margin: var(--spacing-12) 0 0; font-variant-numeric: tabular-nums; }
+  .kpi .d { margin: var(--spacing-8) 0 0; color: var(--slate); font-variant-numeric: tabular-nums; }
+  .grid2 { display: grid; grid-template-columns: 2fr 1fr; gap: var(--element-gap); margin-bottom: var(--element-gap); }
+  .grid2b { display: grid; grid-template-columns: 1fr 1fr; gap: var(--element-gap); margin-bottom: var(--element-gap); }
+  .ctitle { display: flex; justify-content: space-between; align-items: center; gap: var(--spacing-12); flex-wrap: wrap; }
+  .ctitle h2 { margin: 0; }
+  .hint { margin: var(--spacing-8) 0 var(--spacing-20); color: var(--slate); }
+  .seg { display: inline-flex; gap: var(--spacing-4); }
   .chartbox { position: relative; height: 280px; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
-  th, td { padding: 7px 8px; border-bottom: 1px solid var(--grid); text-align: right; white-space: nowrap; }
+
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  th, td { padding: var(--spacing-8); border-bottom: 1px solid var(--hairline-silver); text-align: right; white-space: nowrap; }
   th:first-child, td:first-child { text-align: left; }
-  th { color: var(--muted); font-weight: 500; }
-  .heat td.cell { cursor: pointer; }
-  .heat td.cell:hover { outline: 2px solid var(--accent); outline-offset: -2px; }
+  th { color: var(--slate); font-weight: 500; }
+  tbody tr:last-child td { border-bottom: 0; }
+  .heat td.cell { cursor: pointer; color: var(--ink); }
+  .heat td.cell:hover { box-shadow: inset var(--shadow-subtle-2); }
+  .heat td.dim { color: var(--slate); }
   .tscroll { overflow-x: auto; }
-  .detail { max-height: 360px; overflow: auto; }
-  .detail thead th { position: sticky; top: 0; background: var(--surface); cursor: pointer; }
-  footer { color: var(--muted); font-size: 12px; margin-top: 16px; }
+  .detail { max-height: 380px; overflow: auto; }
+  .detail thead th { position: sticky; top: 0; background: var(--gallery-white); cursor: pointer; }
+  footer { color: var(--slate); margin-top: var(--spacing-24); }
+
   @media (max-width: 860px) {
     .kpis { grid-template-columns: repeat(2, 1fr); }
     .grid2, .grid2b { grid-template-columns: 1fr; }
-    .reset { margin-left: 0; }
+    .feature-heading { font-size: 32px; }
+    .wrap { padding: 0 var(--spacing-16); }
+    .card { padding: var(--spacing-20); }
   }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div>
-      <h1>매출 대시보드 2026</h1>
-      <div class="sub">2026년 1~10월 · 제품 5종 · 채널 4곳 · 출처: [교육용 더미] 매출 데이터 2026</div>
-    </div>
-    <button class="chip reset" id="reset">필터 초기화</button>
-  </header>
+<div class="top">
+  <div class="wrap">
+    <section class="hero">
+      <p class="product-kicker">KSECRET BCM1</p>
+      <h1 class="feature-heading">매출 대시보드 2026</h1>
+      <p class="body">2026년 1~10월 · 제품 5종 · 채널 4곳. 칩이나 차트를 눌러 원하는 범위만 봅니다.</p>
+    </section>
 
-  <section class="card filters" aria-label="필터">
-    <div class="frow"><div class="flabel">월</div><div class="chips" id="f-month"></div></div>
-    <div class="frow"><div class="flabel">제품</div><div class="chips" id="f-product"></div></div>
-    <div class="frow"><div class="flabel">채널</div><div class="chips" id="f-channel"></div></div>
-  </section>
+    <section class="filters" aria-label="필터">
+      <div class="frow"><div class="flabel body-small">월</div><div class="chips" id="f-month"></div></div>
+      <div class="frow"><div class="flabel body-small">제품</div><div class="chips" id="f-product"></div></div>
+      <div class="frow"><div class="flabel body-small">채널</div><div class="chips" id="f-channel"></div></div>
+      <div class="toolbar"><button class="kb-link body-small" id="reset">필터 초기화</button></div>
+    </section>
+  </div>
+</div>
 
+<main class="wrap">
   <section class="kpis">
-    <div class="card kpi"><div class="k">총 매출</div><div class="v" id="k-sales"></div><div class="d" id="k-sales-d"></div></div>
-    <div class="card kpi"><div class="k">판매 수량</div><div class="v" id="k-qty"></div><div class="d" id="k-qty-d"></div></div>
-    <div class="card kpi"><div class="k">평균 판매단가</div><div class="v" id="k-asp"></div><div class="d">매출 ÷ 판매수량</div></div>
-    <div class="card kpi"><div class="k">실효 할인율</div><div class="v" id="k-disc"></div><div class="d">1 − 매출 ÷ 정가 매출</div></div>
+    <div class="card kpi"><p class="k body-small">총 매출</p><p class="v feature-title" id="k-sales"></p><p class="d body-small" id="k-sales-d"></p></div>
+    <div class="card kpi"><p class="k body-small">판매 수량</p><p class="v feature-title" id="k-qty"></p><p class="d body-small" id="k-qty-d"></p></div>
+    <div class="card kpi"><p class="k body-small">평균 판매단가</p><p class="v feature-title" id="k-asp"></p><p class="d body-small">매출 ÷ 판매수량</p></div>
+    <div class="card kpi"><p class="k body-small">실효 할인율</p><p class="v feature-title" id="k-disc"></p><p class="d body-small">1 − 매출 ÷ 정가 매출</p></div>
   </section>
 
   <section class="grid2">
     <div class="card">
       <div class="ctitle">
-        <h2>월별 매출</h2>
+        <h2 class="feature-title">월별 매출</h2>
         <div class="seg" id="stackBy">
-          <button data-v="product" class="on">제품별</button><button data-v="channel">채널별</button>
+          <button data-v="product" class="kb-pill kb-pill--action compact-control">제품별</button>
+          <button data-v="channel" class="kb-pill kb-pill--outlined compact-control">채널별</button>
         </div>
       </div>
-      <div class="hint">막대를 클릭하면 그 월만 봅니다</div>
+      <p class="hint body-small">막대를 누르면 그 월만 봅니다</p>
       <div class="chartbox"><canvas id="ch-month"></canvas></div>
     </div>
     <div class="card">
-      <div class="ctitle"><h2>채널별 매출</h2></div>
-      <div class="hint">조각을 클릭하면 그 채널만 봅니다</div>
+      <div class="ctitle"><h2 class="feature-title">채널별 매출</h2></div>
+      <p class="hint body-small">조각을 누르면 그 채널만 봅니다</p>
       <div class="chartbox"><canvas id="ch-channel"></canvas></div>
     </div>
   </section>
 
   <section class="grid2b">
     <div class="card">
-      <div class="ctitle"><h2>제품별 매출</h2></div>
-      <div class="hint">막대를 클릭하면 그 제품만 봅니다</div>
+      <div class="ctitle"><h2 class="feature-title">제품별 매출</h2></div>
+      <p class="hint body-small">막대를 누르면 그 제품만 봅니다</p>
       <div class="chartbox"><canvas id="ch-product"></canvas></div>
     </div>
     <div class="card">
-      <div class="ctitle"><h2>제품 × 채널 매출</h2><span class="hint">단위: 백만원 · 칸을 클릭하면 둘 다 필터</span></div>
-      <div class="tscroll"><table class="heat" id="heat"></table></div>
+      <div class="ctitle"><h2 class="feature-title">제품 × 채널 매출</h2></div>
+      <p class="hint body-small">단위: 백만원 · 칸을 누르면 제품과 채널을 함께 고릅니다</p>
+      <div class="tscroll"><table class="heat body-small" id="heat"></table></div>
     </div>
   </section>
 
   <section class="card">
-    <div class="ctitle"><h2>상세 내역</h2><span class="hint" id="rowcount"></span></div>
-    <div class="detail tscroll"><table id="detail"></table></div>
+    <div class="ctitle"><h2 class="feature-title">상세 내역</h2><span class="body-small" style="color:var(--slate)" id="rowcount"></span></div>
+    <p class="hint body-small">머리글을 누르면 정렬합니다</p>
+    <div class="detail tscroll"><table class="body-small" id="detail"></table></div>
   </section>
 
-  <footer>필터는 여러 개를 함께 고를 수 있습니다. 같은 항목을 다시 누르면 선택이 해제됩니다.</footer>
-</div>
+  <footer class="body-small">필터는 여러 개를 함께 고를 수 있습니다. 같은 항목을 다시 누르면 선택이 해제됩니다. 출처: [교육용 더미] 매출 데이터 2026</footer>
+</main>
 
 <script>
 // 시트 원본: 월, 제품, 채널, 판매수량, 정가, 할인율 → 매출 = 수량 × 정가 × (1 − 할인율)
@@ -170,7 +212,8 @@ const won = v => v.toLocaleString("ko-KR") + "원";
 const eok = v => v >= 1e8 ? (v / 1e8).toFixed(2) + "억원" : Math.round(v / 1e4).toLocaleString("ko-KR") + "만원";
 const mlabel = m => Number(m.slice(5)) + "월";
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-const palette = () => ["--c1", "--c2", "--c3", "--c4", "--c5"].map(css);
+const palette = () => ["--series-1", "--series-2", "--series-3", "--series-4", "--series-5"].map(css);
+const dimmed = hex => hex + "33";
 
 function filtered(skip = "") {
   return ROWS.filter(r =>
@@ -185,59 +228,71 @@ function only(key, val) {
   render();
 }
 
+function pill(label, on, onclick) {
+  const b = document.createElement("button");
+  b.className = "kb-pill compact-control " + (on ? "kb-pill--action" : "kb-pill--outlined");
+  b.textContent = label;
+  b.setAttribute("aria-pressed", on);
+  b.onclick = onclick;
+  return b;
+}
 function buildChips(id, key, items, label) {
   const box = document.getElementById(id);
   box.innerHTML = "";
-  const all = document.createElement("button");
-  all.className = "chip all" + (sel[key].size ? "" : " on");
-  all.textContent = "전체";
-  all.onclick = () => { sel[key].clear(); render(); };
-  box.appendChild(all);
+  box.appendChild(pill("전체", !sel[key].size, () => { sel[key].clear(); render(); }));
   items.forEach((it, i) => {
     const v = key === "m" ? it : i;
-    const b = document.createElement("button");
-    b.className = "chip" + (sel[key].has(v) ? " on" : "");
-    b.textContent = label(it);
-    b.setAttribute("aria-pressed", sel[key].has(v));
-    b.onclick = () => toggle(key, v);
-    box.appendChild(b);
+    box.appendChild(pill(label(it), sel[key].has(v), () => toggle(key, v)));
   });
 }
 
-Chart.defaults.font.family = '"Noto Sans KR", system-ui, sans-serif';
+Chart.defaults.font.family = css("--font-sans");
+Chart.defaults.font.size = 12;
+Chart.defaults.color = css("--slate");
 const charts = {};
 function axisOpts() {
   return {
-    grid: { color: css("--grid") }, border: { display: false },
-    ticks: { color: css("--muted"), callback: v => v >= 1e8 ? (v / 1e8) + "억" : v >= 1e4 ? (v / 1e4).toLocaleString() + "만" : v }
+    grid: { color: css("--control-gray") }, border: { display: false },
+    ticks: { color: css("--slate"), callback: v => v >= 1e8 ? (v / 1e8) + "억" : v >= 1e4 ? (v / 1e4).toLocaleString() + "만" : v }
   };
 }
-function tip() { return { callbacks: { label: c => ` ${c.dataset.label || c.label}: ${won(c.raw)}` } }; }
+function legend() {
+  return { position: "bottom", labels: { color: css("--ink"), boxWidth: 10, boxHeight: 10, usePointStyle: true, pointStyle: "rectRounded" } };
+}
+function tooltip(extra = {}) {
+  return Object.assign({
+    backgroundColor: css("--ink"), titleColor: css("--gallery-white"), bodyColor: css("--gallery-white"),
+    footerColor: css("--gallery-white"), cornerRadius: 10, padding: 10, boxPadding: 4,
+    callbacks: { label: c => ` ${c.dataset.label || c.label}: ${won(c.raw)}` }
+  }, extra);
+}
 
 function renderMonth() {
   const rows = filtered("m");
   const groups = stackBy === "product" ? PRODUCTS : CHANNELS;
   const gk = stackBy === "product" ? "p" : "c";
   const pal = palette();
+  const white = css("--gallery-white");
   const datasets = groups.map((g, gi) => ({
     label: g,
     data: MONTHS.map(m => sum(rows.filter(r => r.m === m && r[gk] === gi), "sales")),
-    backgroundColor: MONTHS.map(m => sel.m.size && !sel.m.has(m) ? pal[gi] + "40" : pal[gi]),
-    borderRadius: 2, hidden: !!(sel[gk].size && !sel[gk].has(gi))
+    backgroundColor: MONTHS.map(m => sel.m.size && !sel.m.has(m) ? dimmed(pal[gi]) : pal[gi]),
+    borderColor: white, borderWidth: { top: 1 }, borderSkipped: false,
+    hidden: !!(sel[gk].size && !sel[gk].has(gi))
   }));
-  const cfg = {
+  const tt = tooltip({ mode: "index" });
+  tt.callbacks.footer = items => "합계: " + won(items.reduce((a, i) => a + i.raw, 0));
+  draw("ch-month", {
     type: "bar",
     data: { labels: MONTHS.map(mlabel), datasets },
     options: {
       maintainAspectRatio: false, animation: { duration: 250 },
-      scales: { x: { stacked: true, grid: { display: false }, ticks: { color: css("--muted") } }, y: { stacked: true, ...axisOpts() } },
-      plugins: { legend: { position: "bottom", labels: { color: css("--text"), boxWidth: 10, boxHeight: 10 } },
-        tooltip: { mode: "index", ...tip(), footer: { } } },
+      scales: { x: { stacked: true, grid: { display: false }, border: { color: css("--hairline-silver") }, ticks: { color: css("--slate") } },
+        y: { stacked: true, ...axisOpts() } },
+      plugins: { legend: legend(), tooltip: tt },
       onClick: (e, els) => { if (els.length) only("m", MONTHS[els[0].index]); }
     }
-  };
-  cfg.options.plugins.tooltip.callbacks.footer = items => "합계: " + won(items.reduce((a, i) => a + i.raw, 0));
-  draw("ch-month", cfg);
+  });
 }
 
 function renderChannel() {
@@ -247,14 +302,14 @@ function renderChannel() {
   draw("ch-channel", {
     type: "doughnut",
     data: { labels: CHANNELS, datasets: [{ data,
-      backgroundColor: CHANNELS.map((_, i) => sel.c.size && !sel.c.has(i) ? pal[i] + "40" : pal[i]),
-      borderColor: css("--surface"), borderWidth: 2 }] },
+      backgroundColor: CHANNELS.map((_, i) => sel.c.size && !sel.c.has(i) ? dimmed(pal[i]) : pal[i]),
+      borderColor: css("--gallery-white"), borderWidth: 2 }] },
     options: {
-      maintainAspectRatio: false, cutout: "58%", animation: { duration: 250 },
-      plugins: { legend: { position: "bottom", labels: { color: css("--text"), boxWidth: 10, boxHeight: 10 } },
-        tooltip: { callbacks: { label: c => {
+      maintainAspectRatio: false, cutout: "60%", animation: { duration: 250 },
+      plugins: { legend: legend(),
+        tooltip: tooltip({ callbacks: { label: c => {
           const t = c.dataset.data.reduce((a, b) => a + b, 0);
-          return ` ${c.label}: ${won(c.raw)} (${(c.raw / t * 100).toFixed(1)}%)`; } } } },
+          return ` ${c.label}: ${won(c.raw)} (${(c.raw / t * 100).toFixed(1)}%)`; } } }) },
       onClick: (e, els) => { if (els.length) only("c", els[0].index); }
     }
   });
@@ -267,11 +322,12 @@ function renderProduct() {
   draw("ch-product", {
     type: "bar",
     data: { labels: PRODUCTS, datasets: [{ label: "매출", data,
-      backgroundColor: PRODUCTS.map((_, i) => sel.p.size && !sel.p.has(i) ? pal[i] + "40" : pal[i]), borderRadius: 3 }] },
+      backgroundColor: PRODUCTS.map((_, i) => sel.p.size && !sel.p.has(i) ? dimmed(pal[i]) : pal[i]),
+      borderRadius: 4, borderSkipped: "start" }] },
     options: {
       indexAxis: "y", maintainAspectRatio: false, animation: { duration: 250 },
-      scales: { x: axisOpts(), y: { grid: { display: false }, ticks: { color: css("--text") } } },
-      plugins: { legend: { display: false }, tooltip: tip() },
+      scales: { x: axisOpts(), y: { grid: { display: false }, border: { color: css("--hairline-silver") }, ticks: { color: css("--ink") } } },
+      plugins: { legend: { display: false }, tooltip: tooltip() },
       onClick: (e, els) => { if (els.length) only("p", els[0].index); }
     }
   });
@@ -289,30 +345,34 @@ function renderHeat() {
   const cell = (p, c) => sum(rows.filter(r => r.p === p && r.c === c), "sales");
   const vals = PRODUCTS.flatMap((_, p) => CHANNELS.map((_, c) => cell(p, c)));
   const max = Math.max(...vals, 1);
-  const rgb = css("--heat");
+  const rgb = css("--heat-rgb");
   let h = "<thead><tr><th>제품</th>" + CHANNELS.map(c => `<th>${c}</th>`).join("") + "<th>합계</th></tr></thead><tbody>";
   PRODUCTS.forEach((pn, p) => {
     let tot = 0;
     h += `<tr><td>${pn}</td>`;
     CHANNELS.forEach((_, c) => {
       const v = cell(p, c); tot += v;
-      const a = (0.08 + 0.72 * v / max).toFixed(2);
+      // 가장 진한 칸도 ink 글자가 7:1 이상 읽히도록 투명도 상한 0.55
+      const a = (0.05 + 0.5 * v / max).toFixed(2);
       const act = (!sel.p.size || sel.p.has(p)) && (!sel.c.size || sel.c.has(c));
-      const fg = a > 0.5 ? "#fff" : "inherit";
-      h += `<td class="cell" data-p="${p}" data-c="${c}" title="${pn} · ${CHANNELS[c]}: ${won(v)}"
-        style="background:rgba(${rgb},${act ? a : 0.04});color:${act ? fg : "var(--muted)"}">${(v / 1e6).toFixed(1)}</td>`;
+      h += `<td class="cell${act ? "" : " dim"}" tabindex="0" data-p="${p}" data-c="${c}" title="${pn} · ${CHANNELS[c]}: ${won(v)}"
+        style="background:rgba(${rgb},${act ? a : 0.03})">${(v / 1e6).toFixed(1)}</td>`;
     });
-    h += `<td><b>${(tot / 1e6).toFixed(1)}</b></td></tr>`;
+    h += `<td class="callout-price">${(tot / 1e6).toFixed(1)}</td></tr>`;
   });
   h += "</tbody>";
   const t = document.getElementById("heat");
   t.innerHTML = h;
-  t.querySelectorAll("td.cell").forEach(td => td.onclick = () => {
-    const p = +td.dataset.p, c = +td.dataset.c;
-    const same = sel.p.size === 1 && sel.p.has(p) && sel.c.size === 1 && sel.c.has(c);
-    sel.p.clear(); sel.c.clear();
-    if (!same) { sel.p.add(p); sel.c.add(c); }
-    render();
+  t.querySelectorAll("td.cell").forEach(td => {
+    const pick = () => {
+      const p = +td.dataset.p, c = +td.dataset.c;
+      const same = sel.p.size === 1 && sel.p.has(p) && sel.c.size === 1 && sel.c.has(c);
+      sel.p.clear(); sel.c.clear();
+      if (!same) { sel.p.add(p); sel.c.add(c); }
+      render();
+    };
+    td.onclick = pick;
+    td.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } };
   });
 }
 
@@ -338,17 +398,21 @@ function renderDetail() {
   const val = r => sortKey === "price" ? PRICES[r.p] : r[sortKey];
   rows.sort((a, b) => (val(a) > val(b) ? 1 : val(a) < val(b) ? -1 : 0) * sortDir);
   const arrow = k => k === sortKey ? (sortDir > 0 ? " ▲" : " ▼") : "";
-  let h = "<thead><tr>" + COLS.map(([k, n]) => `<th data-k="${k}">${n}${arrow(k)}</th>`).join("") + "</tr></thead><tbody>";
+  let h = "<thead><tr>" + COLS.map(([k, n]) => `<th tabindex="0" data-k="${k}">${n}${arrow(k)}</th>`).join("") + "</tr></thead><tbody>";
   rows.forEach(r => { h += "<tr>" + COLS.map(([, , f]) => `<td>${f(r)}</td>`).join("") + "</tr>"; });
   h += "</tbody>";
   const t = document.getElementById("detail");
   t.innerHTML = h;
-  t.querySelectorAll("th").forEach(th => th.onclick = () => {
-    const k = th.dataset.k;
-    if (k === sortKey) sortDir = -sortDir; else { sortKey = k; sortDir = k === "sales" || k === "qty" ? -1 : 1; }
-    renderDetail();
+  t.querySelectorAll("th").forEach(th => {
+    const sort = () => {
+      const k = th.dataset.k;
+      if (k === sortKey) sortDir = -sortDir; else { sortKey = k; sortDir = k === "sales" || k === "qty" ? -1 : 1; }
+      renderDetail();
+    };
+    th.onclick = sort;
+    th.onkeydown = e => { if (e.key === "Enter") sort(); };
   });
-  document.getElementById("rowcount").textContent = `${rows.length}건 · 머리글을 클릭하면 정렬`;
+  document.getElementById("rowcount").textContent = `${rows.length}건`;
 }
 
 function render() {
@@ -361,10 +425,13 @@ function render() {
 document.getElementById("reset").onclick = () => { sel.m.clear(); sel.p.clear(); sel.c.clear(); render(); };
 document.querySelectorAll("#stackBy button").forEach(b => b.onclick = () => {
   stackBy = b.dataset.v;
-  document.querySelectorAll("#stackBy button").forEach(x => x.classList.toggle("on", x === b));
+  document.querySelectorAll("#stackBy button").forEach(x => {
+    x.classList.toggle("kb-pill--action", x === b);
+    x.classList.toggle("kb-pill--outlined", x !== b);
+  });
   renderMonth();
 });
-matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
+document.fonts.ready.then(render);
 render();
 </script>
 </body>
