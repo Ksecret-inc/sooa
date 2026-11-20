@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SEOUL 1988 Top 100 Challenge</title>
+<meta name="description" content="KSECRET SEOUL 1988 Global Supporters Top 100 Challenge — share your skincare routine on TikTok or Instagram and compete for a $98,000 prize pool. Nov 13 – Dec 25, 2026.">
+<!-- Design system: KSECRET BCM1 (Pretendard, one blue family, 28px corners, no shadows) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root {
+    --gallery-white: #ffffff; --studio-mist: #f5f5f7; --paper-frost: #fafafc;
+    --hairline-silver: #d6d6d6; --control-gray: #e6e6e8;
+    --ink: #1d1d1f; --slate: #707070; --steel: #86868b;
+    --link-blue: #0066cc; --action-blue: #0071e3; --on-action-blue: #ffffff; --launch-blue: #004d99;
+    --nav-label: rgba(0, 0, 0, 0.8);
+    --font-sans: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+    --spacing-4: 4px; --spacing-8: 8px; --spacing-12: 12px; --spacing-16: 16px; --spacing-20: 20px;
+    --spacing-24: 24px; --spacing-28: 28px; --spacing-32: 32px; --spacing-40: 40px; --spacing-48: 48px;
+    --spacing-52: 52px; --spacing-64: 64px; --spacing-80: 80px;
+    --section-gap: 90px; --card-padding: 28px; --element-gap: 20px;
+    --radius-cards: 28px; --radius-images: 28px; --radius-links: 10px; --radius-buttons: 9999px;
+    --shadow-subtle-2: 0px 0px 0px 1px #86868b;
+  }
+
+  /* type styles */
+  .hero-display { font-size: 80px; line-height: 1.05; font-weight: 600; letter-spacing: -1.2px; }
+  .feature-heading { font-size: 40px; line-height: 1.1; font-weight: 600; letter-spacing: 0; }
+  .feature-title { font-size: 24px; line-height: 1.17; font-weight: 600; }
+  .product-kicker { font-size: 21px; line-height: 1; font-weight: 600; letter-spacing: 0.231px; }
+  .product-nav-title { font-size: 19px; line-height: 1.21; font-weight: 600; letter-spacing: 0.228px; }
+  .body { font-size: 17px; line-height: 1.47; font-weight: 400; letter-spacing: -0.374px; }
+  .feature-copy { font-size: 17px; line-height: 1.35; font-weight: 400; letter-spacing: -0.374px; }
+  .body-small { font-size: 14px; line-height: 1.29; font-weight: 400; letter-spacing: -0.224px; }
+  .callout-price { font-size: 14px; line-height: 1.29; font-weight: 600; letter-spacing: -0.224px; }
+  .compact-control { font-size: 12px; line-height: 1.33; font-weight: 400; letter-spacing: -0.12px; }
+  .status-label { font-size: 12px; line-height: 16px; font-weight: 600; letter-spacing: -0.12px; color: var(--launch-blue); }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 60px; }
+  body {
+    margin: 0; font-family: var(--font-sans); background: var(--gallery-white); color: var(--ink);
+    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-wrap: break-word;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 var(--spacing-24); }
+  .narrow { max-width: 760px; margin: 0 auto; }
+  p { margin: 0; }
+  strong { font-weight: 600; }
+  .muted { color: var(--slate); }
+  .center { text-align: center; }
+
+  /* links, pills, focus */
+  .kb-link { color: var(--link-blue); text-decoration: none; border-radius: var(--radius-links); }
+  .kb-link:hover { text-decoration: underline; }
+  .kb-pill {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: var(--spacing-4) var(--spacing-12);
+    border: 1px solid transparent; border-radius: var(--radius-buttons);
+    background: transparent; color: var(--ink); text-decoration: none; white-space: nowrap; cursor: pointer;
+    font-family: inherit;
+  }
+  .kb-pill--outlined { border-color: var(--steel); }
+  .kb-pill--action { background: var(--action-blue); border-color: var(--action-blue); color: var(--on-action-blue); }
+  .kb-pill--lg { padding: var(--spacing-12) var(--spacing-24); font-size: 17px; letter-spacing: -0.374px; }
+  a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--action-blue); outline-offset: 2px; }
+  .cta-row { margin-top: var(--spacing-32); display: flex; gap: var(--spacing-12); justify-content: center; flex-wrap: wrap; }
+
+  /* LocalNav */
+  .kb-localnav {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(255, 255, 255, 0.92); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--hairline-silver);
+  }
+  .kb-localnav .wrap { display: flex; align-items: center; justify-content: space-between; gap: var(--element-gap); min-height: var(--spacing-52); }
+  .kb-localnav__links { display: flex; gap: var(--spacing-24); }
+  .kb-localnav__links a { color: var(--nav-label); text-decoration: none; border-radius: var(--radius-links); }
+  .kb-localnav__links a:hover { color: var(--ink); }
+
+  /* Sections: centered head — kicker, headline, copy */
+  section.band { padding: var(--section-gap) 0; }
+  section.band.mist { background: var(--studio-mist); }
+  .head { text-align: center; max-width: 720px; margin: 0 auto var(--spacing-48); }
+  .head .kicker { color: var(--slate); font-size: 17px; font-weight: 500; letter-spacing: -0.374px; }
+  .head h2 { margin: var(--spacing12, 12px) 0 0; }
+  .head p.feature-copy { margin-top: var(--spacing-16); color: var(--ink); }
+
+  /* Hero */
+  .kb-hero { padding: var(--spacing-80) 0 var(--section-gap); text-align: center; }
+  .kb-hero__kicker { margin-top: var(--spacing-16); }
+  .kb-hero__title { margin: var(--spacing-16) auto 0; max-width: 10em; }
+  .kb-hero__copy { margin: var(--spacing-24) auto 0; max-width: 32em; }
+  .kb-hero__note { margin-top: var(--spacing-16); }
+  .status { display: inline-flex; align-items: center; gap: var(--spacing-8); }
+  .status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--action-blue); }
+  .status.closed::before { background: var(--steel); }
+  .status.closed { color: var(--slate); }
+
+  /* Cards */
+  .cards { display: grid; gap: var(--element-gap); }
+  .cards.c3 { grid-template-columns: repeat(3, 1fr); }
+  .cards.c2 { grid-template-columns: repeat(2, 1fr); }
+  .card { background: var(--gallery-white); border-radius: var(--radius-cards); padding: var(--card-padding); }
+  .band:not(.mist) .card { background: var(--studio-mist); }
+  .card h3 { margin: 0; }
+  .card .feature-copy { margin-top: var(--spacing-12); }
+  .card .more { display: inline-block; margin-top: var(--spacing-20); }
+
+  /* Prize */
+  .big { display: block; font-size: 120px; line-height: 1; font-weight: 600; letter-spacing: -2px; margin-top: var(--spacing-16); }
+  .prize-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--element-gap); margin-top: var(--spacing-48); }
+  .prize { text-align: center; }
+  .prize .amount { display: block; font-size: 48px; line-height: 1; font-weight: 600; letter-spacing: -0.8px; }
+  .prize h3 { margin-top: var(--spacing-16); }
+  .prize p { margin-top: var(--spacing-8); }
+  .podium { list-style: none; margin: var(--spacing-20) 0 0; padding: 0; text-align: left; }
+  .podium li { display: flex; justify-content: space-between; padding: var(--spacing-8) 0; border-top: 1px solid var(--hairline-silver); }
+  .stack { margin-top: var(--spacing-48); }
+  .stack h3 { text-align: center; margin-bottom: var(--spacing-20); }
+  .rows { list-style: none; margin: 0; padding: 0; }
+  .rows li { display: flex; justify-content: space-between; gap: var(--spacing-16); padding: var(--spacing-16) 0; border-top: 1px solid var(--hairline-silver); }
+  .rows li:first-child { border-top: 0; }
+  .rows li.total { border-top: 1px solid var(--ink); font-weight: 600; }
+  .rows .r { text-align: right; white-space: nowrap; }
+
+  /* Steps */
+  .steps { list-style: none; margin: 0; padding: 0; }
+  .steps li { display: grid; grid-template-columns: 48px 1fr; gap: var(--spacing-16); padding: var(--spacing-24) 0; border-top: 1px solid var(--hairline-silver); }
+  .steps li:first-child { border-top: 0; }
+  .steps .n { font-size: 24px; font-weight: 600; color: var(--launch-blue); line-height: 1.17; }
+  .steps p.feature-copy { margin-top: var(--spacing-8); }
+  .note-card { margin-top: var(--spacing-24); }
+  .hashbox { margin-top: var(--spacing-40); text-align: center; }
+  .hashbox .tagline { font-size: 24px; font-weight: 600; line-height: 1.3; }
+  .hashbox .hint { margin-top: var(--spacing-8); }
+  .hashbox button { margin-top: var(--spacing-16); }
+
+  /* Do / Don't */
+  .checks { list-style: none; margin: var(--spacing-16) 0 0; padding: 0; }
+  .checks li { display: grid; grid-template-columns: 24px 1fr; gap: var(--spacing-12); padding: var(--spacing-12) 0; border-top: 1px solid var(--hairline-silver); }
+  .checks li:first-child { border-top: 0; }
+  .mark { width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+  .mark.yes { background: var(--action-blue); color: var(--on-action-blue); }
+  .mark.no { background: var(--gallery-white); color: var(--ink); box-shadow: var(--shadow-subtle-2); }
+  .checks .body-small { margin-top: var(--spacing-4); }
+
+  /* Briefs */
+  .briefs { display: grid; gap: var(--element-gap); }
+  .brief { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: var(--spacing-40); align-items: start; }
+  .brief img { display: block; width: 100%; height: auto; border-radius: var(--radius-images); }
+  .brief h3 { margin-top: var(--spacing-12); }
+  .brief .feature-copy { margin-top: var(--spacing-16); }
+  .brief dl { margin: var(--spacing-24) 0 0; display: grid; gap: var(--spacing-16); }
+  .brief dt { color: var(--slate); }
+  .brief dd { margin: var(--spacing-8) 0 0; }
+  .tags { display: flex; flex-wrap: wrap; gap: var(--spacing-8); align-items: center; }
+  .tags span { padding: var(--spacing-4) var(--spacing-12); border-radius: var(--radius-buttons); box-shadow: var(--shadow-subtle-2); background: var(--gallery-white); }
+
+  /* Dates */
+  .dates { list-style: none; margin: 0; padding: 0; }
+  .dates li { display: grid; grid-template-columns: 160px 1fr; gap: var(--spacing-24); padding: var(--spacing-24) 0; border-top: 1px solid var(--hairline-silver); align-items: baseline; }
+  .dates li:first-child { border-top: 0; }
+  .dates .d { font-weight: 600; color: var(--launch-blue); font-size: 17px; letter-spacing: -0.374px; }
+  .dates .body-small { margin-top: var(--spacing-4); }
+
+  /* Closing */
+  .closing { text-align: center; }
+  .closing .feature-copy { margin: var(--spacing-16) auto 0; max-width: 32em; }
+
+  footer { background: var(--studio-mist); padding: var(--spacing-40) 0; border-top: 1px solid var(--hairline-silver); }
+  footer .wrap { display: flex; justify-content: space-between; gap: var(--spacing-16); flex-wrap: wrap; }
+
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--ink); color: var(--gallery-white);
+    padding: var(--spacing-8) var(--spacing-16); border-radius: var(--radius-buttons); opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .toast.on { opacity: 1; }
+
+  @media (max-width: 900px) {
+    .hero-display { font-size: 52px; letter-spacing: -0.8px; }
+    .big { font-size: 72px; }
+    .feature-heading { font-size: 32px; }
+    .cards.c3, .cards.c2, .prize-grid { grid-template-columns: 1fr; }
+    .brief { grid-template-columns: 1fr; gap: var(--spacing-24); }
+    .kb-localnav__links { display: none; }
+    .kb-hero { padding-top: var(--spacing-64); }
+    section.band { padding: var(--spacing-64) 0; }
+    .dates li { grid-template-columns: 1fr; gap: var(--spacing-4); }
+  }
+  @media (max-width: 480px) {
+    .wrap { padding: 0 var(--spacing-16); }
+    .hero-display { font-size: 40px; }
+    .big { font-size: 60px; }
+    .card { padding: var(--spacing-24); }
+    .hashbox .tagline { font-size: 19px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="kb-localnav" aria-label="Page">
+  <div class="wrap">
+    <span class="product-nav-title">KSECRET</span>
+    <div class="kb-localnav__links body-small">
+      <a href="#products">Products</a>
+      <a href="#prizes">Prizes</a>
+      <a href="#how">How it works</a>
+      <a href="#guidelines">Guidelines</a>
+      <a href="#dates">Dates</a>
+    </div>
+    <a class="kb-pill kb-pill--action compact-control" href="https://forms.gle/QyLPxUVjvD7VKS4P9" target="_blank" rel="noopener">Sign up</a>
+  </div>
+</nav>
+
+<header class="kb-hero">
+  <div class="wrap">
+    <p class="status-label status" id="status">Uploads open Nov 13 – Dec 25, 2026</p>
+    <p class="product-kicker kb-hero__kicker">KSECRET · SEOUL 1988</p>
+    <h1 class="hero-display kb-hero__title">Top 100 Challenge.</h1>
+    <p class="body kb-hero__copy">Time to pause and soothe your skin and mind. Join the KSECRET Healing Journey: share your comforting self-care and skincare routines on TikTok or Instagram, and discover warm, meaningful rewards along the way.</p>
+    <div class="cta-row">
+      <a class="kb-pill kb-pill--action kb-pill--lg" href="https://forms.gle/QyLPxUVjvD7VKS4P9" target="_blank" rel="noopener">Sign up here</a>
+      <a class="kb-pill kb-pill--outlined kb-pill--lg" href="https://forms.gle/mE2oyLxJAKrudtD9A" target="_blank" rel="noopener">Submit your content</a>
+    </div>
+    <p class="body-small muted kb-hero__note">Sign-up is required to be eligible for all rewards.</p>
+  </div>
+</header>
+
+<section class="band mist" id="products">
+  <div class="wrap">
+    <div class="head">
+      <p class="kicker">The products you’ll be filming</p>
+      <h2 class="feature-heading" style="margin-top:12px">Feature at least one.</h2>
+      <p class="feature-copy">Your content must feature at least one (1) of these SEOUL 1988 products — or all three.</p>
+    </div>
+    <div class="cards c3">
+      <article class="card">
+        <p class="status-label">Serum · 30ml</p>
+        <h3 class="feature-title" style="margin-top:12px">Retinal Liposome 2% + Black Ginseng</h3>
+        <a class="kb-link body-small more" href="https://www.yesstyle.com/en/ksecret-seoul-1988-serum-retinal-liposome-2-black-ginseng-30ml/info.html/pid.1126934079" target="_blank" rel="noopener">View on YesStyle ›</a>
+      </article>
+      <article class="card">
+        <p class="status-label">Eye Cream · 30ml</p>
+        <h3 class="feature-title" style="margin-top:12px">Retinal Liposome 4% + Fermented Bean</h3>
+        <a class="kb-link body-small more" href="https://www.yesstyle.com/en/ksecret-seoul-1988-eye-cream-retinal-liposome-4-fermented-bean-30ml/info.html/pid.1130836320" target="_blank" rel="noopener">View on YesStyle ›</a>
+      </article>
+      <article class="card">
+        <p class="status-label">Eye Patch · 60 patches</p>
+        <h3 class="feature-title" style="margin-top:12px">Retinal Glow Eye Patch: RETI-NAD + Turmeric</h3>
+        <a class="kb-link body-small more" href="https://www.yesstyle.com/en/ksecret-seoul-1988-retinal-glow-eye-patch-reti-nad-turmeric-60-patches/info.html/pid.1138004237" target="_blank" rel="noopener">View on YesStyle ›</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="prizes">
+  <div class="wrap">
+    <div class="head" style="margin-bottom:0">
+      <p class="kicker">The total prize pool</p>
+      <span class="big">$98,000</span>
+      <p class="feature-copy">Turn your skincare transformation into serious cash.</p>
+    </div>
+
+    <div class="prize-grid">
+      <article class="card prize">
+        <span class="amount">$800</span>
+        <h3 class="feature-title">Top 100 Creators</h3>
+        <p class="body-small muted">Each, for the 100 top creators. Crossposting gives you a higher chance to be featured.</p>
+      </article>
+      <article class="card prize">
+        <span class="amount">$5,000</span>
+        <h3 class="feature-title">Global Top 3 Champions</h3>
+        <ul class="podium body-small">
+          <li><span>1st place</span><strong>$5,000</strong></li>
+          <li><span>2nd place</span><strong>$3,000</strong></li>
+          <li><span>3rd place</span><strong>$2,000</strong></li>
+        </ul>
+      </article>
+      <article class="card prize">
+        <span class="amount">$800</span>
+        <h3 class="feature-title">Share Master</h3>
+        <p class="body-small muted">Special prize for the top 10 creators with the most total shares.</p>
+      </article>
+    </div>
+
+    <div class="stack narrow">
+      <h3 class="feature-title">How the prize pool adds up</h3>
+      <ul class="rows feature-copy">
+        <li><span>Top 100 Creators <span class="muted">· 100 × $800</span></span><span class="r">$80,000</span></li>
+        <li><span>Global Top 3 Champions <span class="muted">· $5,000 + $3,000 + $2,000</span></span><span class="r">$10,000</span></li>
+        <li><span>Share Master <span class="muted">· 10 × $800</span></span><span class="r">$8,000</span></li>
+        <li class="total"><span>Total prize pool</span><span class="r">$98,000</span></li>
+      </ul>
+    </div>
+
+    <div class="cards c2" style="margin-top:48px">
+      <article class="card">
+        <p class="status-label">Your mission to win</p>
+        <h3 class="feature-title" style="margin-top:12px">3 unique videos, 1,000+ views each.</h3>
+        <p class="feature-copy">Upload three unique videos on TikTok or Instagram and hit at least 1,000 views on each one.</p>
+        <p class="body-small muted" style="margin-top:12px">Duplicate cross-posting counts as one submission. Keep it fresh with three distinct vibes.</p>
+      </article>
+      <article class="card">
+        <p class="status-label">How we pick our winners</p>
+        <h3 class="feature-title" style="margin-top:12px">Handpicked by the KSECRET team.</h3>
+        <p class="feature-copy">Based on content quality, creativity, engagement, brand synergy and overall performance. Show us what you’ve got.</p>
+        <p class="body-small muted" style="margin-top:12px">Share Master counts total shares of submitted videos uploaded Nov 13 – Dec 25. No math required — we do the calculating.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="band mist" id="how">
+  <div class="wrap narrow">
+    <div class="head">
+      <p class="kicker">How to take part</p>
+      <h2 class="feature-heading" style="margin-top:12px">How it works.</h2>
+      <p class="feature-copy">Signing up and submitting decide eligibility. Posting alone isn’t enough — submit every link.</p>
+    </div>
+    <ol class="steps">
+      <li><span class="n">1</span><div><h3 class="feature-title">Sign up</h3><p class="feature-copy">Fill in the <a class="kb-link" href="https://forms.gle/QyLPxUVjvD7VKS4P9" target="_blank" rel="noopener">sign-up form</a>. Sign-up is required to be eligible for all rewards.</p></div></li>
+      <li><span class="n">2</span><div><h3 class="feature-title">Pick your story</h3><p class="feature-copy">Choose one of the four <a class="kb-link" href="#guidelines">creative briefs</a> and read the visual checklist before you film.</p></div></li>
+      <li><span class="n">3</span><div><h3 class="feature-title">Film 3 unique videos</h3><p class="feature-copy">Feature at least one SEOUL 1988 product. Show the before &amp; after, the texture and the product being applied to the skin.</p></div></li>
+      <li><span class="n">4</span><div><h3 class="feature-title">Post on TikTok or Instagram</h3><p class="feature-copy">Between Nov 13 and Dec 25, with the mandatory hashtags and the tag @KSECRET_GLOBAL.</p></div></li>
+      <li><span class="n">5</span><div><h3 class="feature-title">Submit your links</h3><p class="feature-copy">Send every video through the <a class="kb-link" href="https://forms.gle/mE2oyLxJAKrudtD9A" target="_blank" rel="noopener">submission form</a>. Made 3 or more videos? Add the rest in the “Additional video URL” field.</p></div></li>
+    </ol>
+    <div class="hashbox">
+      <p class="tagline" id="baseTags">#SEOUL1988 #KSECRET #KSECRET100Supporters @KSECRET_GLOBAL</p>
+      <p class="body-small muted hint">Plus the one hashtag for your brief — see each brief below.</p>
+      <button class="kb-pill kb-pill--outlined compact-control" data-copy="#SEOUL1988 #KSECRET #KSECRET100Supporters @KSECRET_GLOBAL">Copy hashtags</button>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="guidelines">
+  <div class="wrap">
+    <div class="head">
+      <p class="kicker">Content guidelines</p>
+      <h2 class="feature-heading" style="margin-top:12px">Unleash your glow.</h2>
+      <p class="feature-copy">Drop 3 original, high-quality videos featuring one (or all) of our products. You have total creative freedom — bring your authentic skincare journey to life.</p>
+    </div>
+
+    <div class="card narrow" style="margin-bottom:48px">
+      <p class="status-label">Visual checklist · Mandatory</p>
+      <ul class="checks feature-copy">
+        <li><span class="mark no" aria-label="Don't">✕</span><div><strong>No unboxing or boxes</strong><p class="body-small muted">Skip the cardboard. Dive straight into the product and skin.</p></div></li>
+        <li><span class="mark yes" aria-label="Do">✓</span><div><strong>Clear before vs. after</strong><p class="body-small muted">Show that real skin transformation.</p></div></li>
+        <li><span class="mark yes" aria-label="Do">✓</span><div><strong>Texture &amp; application</strong><p class="body-small muted">Zoom in on the rich formula and how it melts into the skin.</p></div></li>
+        <li><span class="mark yes" aria-label="Do">✓</span><div><strong>Application shot required</strong><p class="body-small muted">You don’t need to show your full face, but you must show the product being applied directly to the skin.</p></div></li>
+        <li><span class="mark yes" aria-label="Do">✓</span><div><strong>High quality (HD)</strong><p class="body-small muted">Low-resolution videos are difficult to evaluate. Please shoot in clear, high resolution.</p></div></li>
+        <li><span class="mark yes" aria-label="Do">✓</span><div><strong>Stick to the guidelines</strong><p class="body-small muted">Fully understand and include the core messages and mandatory requirements.</p></div></li>
+      </ul>
+      <p class="body-small muted" style="margin-top:16px"><strong style="color:var(--ink)">Show your creativity.</strong> Follow the essentials, then add your own creative flair — it scores extra points.</p>
+    </div>
+
+    <div class="briefs">
+      <article class="card brief">
+        <img src="images/brief-1.png" alt="Reference stills: applying serum to stretch marks, with before and after shots" loading="lazy">
+        <div>
+          <p class="status-label">Brief 01 · Stretch marks</p>
+          <h3 class="feature-title">Just moisturizing? “Stitch your stretch marks with Retinal.”</h3>
+          <p class="feature-copy">Stretch marks are actually micro-tears in your skin. Stop wasting time with basic body lotions. Use Retinal to boost collagen and rebuild your broken elasticity from the inside out.</p>
+          <dl class="body-small">
+            <div><dt>Mandatory hashtags and tags</dt><dd><div class="tags compact-control"><span>#SEOUL1988</span><span>#KSECRET</span><span>#KSECRET100Supporters</span><span>#stretchmark</span><span>@KSECRET_GLOBAL</span><button class="kb-link compact-control" style="background:none;border:0;cursor:pointer" data-copy="#SEOUL1988 #KSECRET #KSECRET100Supporters #stretchmark @KSECRET_GLOBAL">Copy</button></div></dd></div>
+            <div><dt>Reference videos</dt><dd><a class="kb-link" href="https://www.tiktok.com/@vinstarring/video/7597799643832913185" target="_blank" rel="noopener">Video 1 ›</a> &nbsp; <a class="kb-link" href="https://www.tiktok.com/@corah002/video/7607175638243364117" target="_blank" rel="noopener">Video 2 ›</a></dd></div>
+            <div><dt>Visual must-have</dt><dd>Before &amp; after visuals are strictly required.</dd></div>
+          </dl>
+        </div>
+      </article>
+
+      <article class="card brief">
+        <img src="images/brief-2.png" alt="Reference stills: underarm pigmentation before and after" loading="lazy">
+        <div>
+          <p class="status-label">Brief 02 · Hyperpigmentation</p>
+          <h3 class="feature-title">Dark underarms? “It’s not dirt, it’s pigmentation.”</h3>
+          <p class="feature-copy">Scrubbing won’t help if it’s dead skin buildup. Let Retinal’s rapid cell turnover gently peel away the dark, stubborn layers to reveal fresh, bright skin underneath.</p>
+          <dl class="body-small">
+            <div><dt>Mandatory hashtags and tags</dt><dd><div class="tags compact-control"><span>#SEOUL1988</span><span>#KSECRET</span><span>#KSECRET100Supporters</span><span>#hyperpigmentation</span><span>@KSECRET_GLOBAL</span><button class="kb-link compact-control" style="background:none;border:0;cursor:pointer" data-copy="#SEOUL1988 #KSECRET #KSECRET100Supporters #hyperpigmentation @KSECRET_GLOBAL">Copy</button></div></dd></div>
+            <div><dt>Reference videos</dt><dd><a class="kb-link" href="https://www.tiktok.com/@skinwithgoody/video/7631259521473858834" target="_blank" rel="noopener">Video 1 ›</a> &nbsp; <a class="kb-link" href="https://www.tiktok.com/@musebynatt/video/7630845510991072526" target="_blank" rel="noopener">Video 2 ›</a></dd></div>
+            <div><dt>Visual must-have</dt><dd>Before &amp; after visuals are strictly required.</dd></div>
+          </dl>
+        </div>
+      </article>
+
+      <article class="card brief">
+        <img src="images/brief-3.png" alt="Reference stills: wrinkles before and after using Retinal" loading="lazy">
+        <div>
+          <p class="status-label">Brief 03 · Anti-aging</p>
+          <h3 class="feature-title">Tired of waiting for Retinol? “Iron out your wrinkles, fast.”</h3>
+          <p class="feature-copy">Frustrated with slow anti-aging results? Step up to Retinal. It acts one step faster than Retinol. From deep smile lines to fine eye wrinkles, use Retinal to quickly plump and “iron out” your skin.</p>
+          <dl class="body-small">
+            <div><dt>Mandatory hashtags and tags</dt><dd><div class="tags compact-control"><span>#SEOUL1988</span><span>#KSECRET</span><span>#KSECRET100Supporters</span><span>#antiaging</span><span>@KSECRET_GLOBAL</span><button class="kb-link compact-control" style="background:none;border:0;cursor:pointer" data-copy="#SEOUL1988 #KSECRET #KSECRET100Supporters #antiaging @KSECRET_GLOBAL">Copy</button></div></dd></div>
+            <div><dt>Reference videos</dt><dd><a class="kb-link" href="https://www.tiktok.com/@albulena/video/7644991249405086996" target="_blank" rel="noopener">Video 1 ›</a> &nbsp; <a class="kb-link" href="https://www.tiktok.com/@skincare.enthusia0/video/7604544198888475925" target="_blank" rel="noopener">Video 2 ›</a></dd></div>
+            <div><dt>Visual must-have</dt><dd>Before &amp; after visuals are strictly required.</dd></div>
+          </dl>
+        </div>
+      </article>
+
+      <article class="card brief">
+        <img src="images/brief-4.png" alt="Reference stills: eye patch turning from yellow to clear, with before and after shots" loading="lazy">
+        <div>
+          <p class="status-label">Brief 04 · Eye patch</p>
+          <h3 class="feature-title">Yellow to clear: the eye patch reveal</h3>
+          <p class="feature-copy">Watch the patch turn from yellow to clear while tired-looking eyes look brighter and less puffy within a week.</p>
+          <dl class="body-small">
+            <div><dt>Mandatory hashtags and tags</dt><dd><div class="tags compact-control"><span>#SEOUL1988</span><span>#KSECRET</span><span>#KSECRET100Supporters</span><span>#antiaging</span><span>@KSECRET_GLOBAL</span><button class="kb-link compact-control" style="background:none;border:0;cursor:pointer" data-copy="#SEOUL1988 #KSECRET #KSECRET100Supporters #antiaging @KSECRET_GLOBAL">Copy</button></div></dd></div>
+            <div><dt>Reference videos</dt><dd><a class="kb-link" href="https://www.tiktok.com/@ms.charissamae/video/7680519965648145685" target="_blank" rel="noopener">Video 1 ›</a> &nbsp; <a class="kb-link" href="https://www.tiktok.com/@kerians_5th/video/7683044652890475797" target="_blank" rel="noopener">Video 2 ›</a></dd></div>
+            <div><dt>Visual must-have</dt><dd>Before &amp; after visuals are strictly required.</dd></div>
+          </dl>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="band mist" id="dates">
+  <div class="wrap narrow">
+    <div class="head">
+      <p class="kicker">Mark your calendar</p>
+      <h2 class="feature-heading" style="margin-top:12px">The dates that matter.</h2>
+    </div>
+    <ol class="dates">
+      <li><span class="d">NOV 13</span><div><h3 class="feature-title" style="margin:0">Uploads open</h3><p class="body-small muted">00:00 PDT</p></div></li>
+      <li><span class="d">NOV 13 – DEC 25</span><div><h3 class="feature-title" style="margin:0">Challenge period</h3><p class="body-small muted">Post your videos. Share Master counts shares of videos uploaded in this window.</p></div></li>
+      <li><span class="d">DEC 25</span><div><h3 class="feature-title" style="margin:0">Uploads close</h3><p class="body-small muted">23:59 PDT</p></div></li>
+      <li><span class="d">DEC 31</span><div><h3 class="feature-title" style="margin:0">Winners announced</h3><p class="body-small muted">17:00 KST</p></div></li>
+    </ol>
+    <div class="cta-row">
+      <a class="kb-pill kb-pill--action kb-pill--lg" href="https://forms.gle/mE2oyLxJAKrudtD9A" target="_blank" rel="noopener">Submit your content here</a>
+    </div>
+    <p class="body-small muted center" style="margin-top:12px">All content must be submitted to be eligible for rewards.</p>
+  </div>
+</section>
+
+<section class="band closing" id="terms">
+  <div class="wrap">
+    <p class="kicker muted" style="font-size:17px;font-weight:500">One last thing</p>
+    <h2 class="feature-heading" style="margin-top:12px">Keep it fair.</h2>
+    <p class="feature-copy">Let’s keep the competition fun and healthy. Any abusive or unfair actions may result in restricted participation. Please read the full Terms and Conditions before you take part.</p>
+    <div class="cta-row">
+      <a class="kb-pill kb-pill--outlined kb-pill--lg" href="https://drive.google.com/file/d/1wY2JRZ2RdAq5Be2I12k0LON6DQPudvcf/view?usp=drive_link" target="_blank" rel="noopener">Read the Terms and Conditions</a>
+      <a class="kb-pill kb-pill--action kb-pill--lg" href="https://forms.gle/QyLPxUVjvD7VKS4P9" target="_blank" rel="noopener">Sign up here</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap body-small muted">
+    <span>KSECRET · SEOUL 1988 Global Supporters Top 100 Challenge · Nov 2026</span>
+    <a class="kb-link" href="#">Back to top ›</a>
+  </div>
+</footer>
+
+<div class="toast body-small" id="toast" role="status" aria-live="polite">Hashtags copied</div>
+
+<script>
+  // Campaign status from the official windows (PDT = UTC−7 as stated in the notice)
+  (function () {
+    const start = Date.parse("2026-11-13T00:00:00-07:00");
+    const end = Date.parse("2026-12-25T23:59:59-07:00");
+    const now = Date.now();
+    const el = document.getElementById("status");
+    if (now < start) el.textContent = "Opens Nov 13, 2026";
+    else if (now <= end) el.textContent = "Now open · Uploads close Dec 25, 2026";
+    else { el.textContent = "Challenge closed · Winners announced Dec 31, 2026"; el.classList.add("closed"); }
+  })();
+
+  // Copy hashtags
+  const toast = document.getElementById("toast");
+  document.querySelectorAll("[data-copy]").forEach(b => b.addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(b.dataset.copy); toast.textContent = "Hashtags copied"; }
+    catch (e) { toast.textContent = "Copy failed — select the text instead"; }
+    toast.classList.add("on");
+    setTimeout(() => toast.classList.remove("on"), 1600);
+  }));
+</script>
+</body>
+</html>
