@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>매출 대시보드 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #f6f7f9; --surface: #ffffff; --border: #e3e6ea; --text: #1d2228; --muted: #69727d;
+    --accent: #2f6fdb; --accent-soft: #e6eefc; --grid: #edf0f3;
+    --c1: #2f6fdb; --c2: #e07b39; --c3: #2a9d78; --c4: #9b59b6; --c5: #d64a6b;
+    --heat: 47, 111, 219;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121519; --surface: #1b1f25; --border: #2c323a; --text: #e8ebef; --muted: #98a1ac;
+      --accent: #6c9cf0; --accent-soft: #23314a; --grid: #262b32;
+      --c1: #6c9cf0; --c2: #f0a06a; --c3: #4fc39c; --c4: #b98bd0; --c5: #ec7891;
+      --heat: 108, 156, 240;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #121519; --surface: #1b1f25; --border: #2c323a; --text: #e8ebef; --muted: #98a1ac;
+    --accent: #6c9cf0; --accent-soft: #23314a; --grid: #262b32;
+    --c1: #6c9cf0; --c2: #f0a06a; --c3: #4fc39c; --c4: #b98bd0; --c5: #ec7891;
+    --heat: 108, 156, 240;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Noto Sans KR", system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 14px; line-height: 1.5; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 24px 16px 48px; }
+  header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  h1 { font-size: 22px; margin: 0; }
+  .sub { color: var(--muted); font-size: 13px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+  .filters { display: grid; gap: 10px; margin-bottom: 16px; }
+  .frow { display: flex; gap: 8px; align-items: flex-start; }
+  .flabel { flex: 0 0 40px; font-weight: 700; padding-top: 5px; color: var(--muted); font-size: 13px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px;
+    padding: 4px 12px; font: inherit; font-size: 13px; cursor: pointer; }
+  .chip:hover { border-color: var(--accent); }
+  .chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .chip.all.on { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+  .reset { margin-left: auto; }
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+  .kpi .k { color: var(--muted); font-size: 13px; }
+  .kpi .v { font-size: 24px; font-weight: 700; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .kpi .d { font-size: 12px; color: var(--muted); }
+  .grid2 { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .grid2b { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .ctitle { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  .ctitle h2 { font-size: 15px; margin: 0; }
+  .hint { color: var(--muted); font-size: 12px; }
+  .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .seg button { border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 12px; padding: 3px 10px; cursor: pointer; }
+  .seg button.on { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+  .chartbox { position: relative; height: 280px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+  th, td { padding: 7px 8px; border-bottom: 1px solid var(--grid); text-align: right; white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; }
+  th { color: var(--muted); font-weight: 500; }
+  .heat td.cell { cursor: pointer; }
+  .heat td.cell:hover { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .tscroll { overflow-x: auto; }
+  .detail { max-height: 360px; overflow: auto; }
+  .detail thead th { position: sticky; top: 0; background: var(--surface); cursor: pointer; }
+  footer { color: var(--muted); font-size: 12px; margin-top: 16px; }
+  @media (max-width: 860px) {
+    .kpis { grid-template-columns: repeat(2, 1fr); }
+    .grid2, .grid2b { grid-template-columns: 1fr; }
+    .reset { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>매출 대시보드 2026</h1>
+      <div class="sub">2026년 1~10월 · 제품 5종 · 채널 4곳 · 출처: [교육용 더미] 매출 데이터 2026</div>
+    </div>
+    <button class="chip reset" id="reset">필터 초기화</button>
+  </header>
+
+  <section class="card filters" aria-label="필터">
+    <div class="frow"><div class="flabel">월</div><div class="chips" id="f-month"></div></div>
+    <div class="frow"><div class="flabel">제품</div><div class="chips" id="f-product"></div></div>
+    <div class="frow"><div class="flabel">채널</div><div class="chips" id="f-channel"></div></div>
+  </section>
+
+  <section class="kpis">
+    <div class="card kpi"><div class="k">총 매출</div><div class="v" id="k-sales"></div><div class="d" id="k-sales-d"></div></div>
+    <div class="card kpi"><div class="k">판매 수량</div><div class="v" id="k-qty"></div><div class="d" id="k-qty-d"></div></div>
+    <div class="card kpi"><div class="k">평균 판매단가</div><div class="v" id="k-asp"></div><div class="d">매출 ÷ 판매수량</div></div>
+    <div class="card kpi"><div class="k">실효 할인율</div><div class="v" id="k-disc"></div><div class="d">1 − 매출 ÷ 정가 매출</div></div>
+  </section>
+
+  <section class="grid2">
+    <div class="card">
+      <div class="ctitle">
+        <h2>월별 매출</h2>
+        <div class="seg" id="stackBy">
+          <button data-v="product" class="on">제품별</button><button data-v="channel">채널별</button>
+        </div>
+      </div>
+      <div class="hint">막대를 클릭하면 그 월만 봅니다</div>
+      <div class="chartbox"><canvas id="ch-month"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ctitle"><h2>채널별 매출</h2></div>
+      <div class="hint">조각을 클릭하면 그 채널만 봅니다</div>
+      <div class="chartbox"><canvas id="ch-channel"></canvas></div>
+    </div>
+  </section>
+
+  <section class="grid2b">
+    <div class="card">
+      <div class="ctitle"><h2>제품별 매출</h2></div>
+      <div class="hint">막대를 클릭하면 그 제품만 봅니다</div>
+      <div class="chartbox"><canvas id="ch-product"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ctitle"><h2>제품 × 채널 매출</h2><span class="hint">단위: 백만원 · 칸을 클릭하면 둘 다 필터</span></div>
+      <div class="tscroll"><table class="heat" id="heat"></table></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="ctitle"><h2>상세 내역</h2><span class="hint" id="rowcount"></span></div>
+    <div class="detail tscroll"><table id="detail"></table></div>
+  </section>
+
+  <footer>필터는 여러 개를 함께 고를 수 있습니다. 같은 항목을 다시 누르면 선택이 해제됩니다.</footer>
+</div>
+
+<script>
+// 시트 원본: 월, 제품, 채널, 판매수량, 정가, 할인율 → 매출 = 수량 × 정가 × (1 − 할인율)
+const PRODUCTS = ["데일리 선크림", "진정 시카 앰플", "수분 장벽 크림", "에센셜 마스크팩(10매)", "약산성 클렌징폼"];
+const PRICES = [19000, 24000, 28000, 15000, 12000];
+const CHANNELS = ["올리브영", "자사몰", "쿠팡", "아마존(해외)"];
+// 월별 → 제품별 → [채널1 수량, 할인율, 채널2 수량, 할인율, ...]
+const RAW = {
+  "2026-01": [[439,20,209,10,330,20,237,0],[600,0,300,10,487,0,404,5],[587,0,323,0,502,0,351,15],[795,5,324,5,521,20,422,5],[746,0,369,10,497,10,371,0]],
+  "2026-02": [[566,10,242,10,365,0,305,0],[595,0,318,0,456,15,388,0],[650,0,267,10,426,20,439,10],[921,20,394,5,627,10,537,0],[715,20,371,0,528,10,481,0]],
+  "2026-03": [[741,0,405,10,496,15,578,10],[664,20,292,5,373,0,342,5],[506,5,246,0,314,20,303,15],[844,15,391,0,546,0,595,20],[733,5,308,10,425,20,389,0]],
+  "2026-04": [[968,20,554,0,710,5,835,20],[680,10,261,5,503,5,396,5],[406,0,204,10,260,0,235,0],[737,10,415,0,591,0,489,15],[691,20,347,0,513,20,466,15]],
+  "2026-05": [[1416,15,590,10,958,5,1103,5],[662,20,308,5,422,20,434,10],[328,10,121,5,221,0,247,5],[751,20,396,0,594,20,552,0],[747,10,348,10,480,10,587,10]],
+  "2026-06": [[1812,20,647,5,1025,5,1108,5],[520,20,281,5,386,20,473,15],[307,5,117,10,170,10,189,5],[905,5,329,10,642,0,595,15],[718,0,279,10,520,15,584,10]],
+  "2026-07": [[1657,15,874,10,1148,10,1216,15],[623,0,323,0,395,20,546,10],[310,15,139,5,200,0,191,0],[878,10,391,5,634,0,623,20],[668,15,353,0,501,15,627,15]],
+  "2026-08": [[1506,15,771,10,1230,10,1333,0],[670,15,296,5,505,15,486,20],[309,0,135,10,210,0,222,10],[964,15,455,5,651,10,734,0],[829,0,314,0,505,20,608,0]],
+  "2026-09": [[1133,0,424,0,672,10,791,0],[637,15,235,0,466,20,451,0],[425,10,200,5,345,0,369,0],[888,10,307,5,638,0,768,0],[739,10,354,10,537,10,616,0]],
+  "2026-10": [[773,5,317,5,541,0,668,10],[573,0,321,5,376,0,536,0],[655,0,277,10,432,10,436,15],[776,10,376,5,528,20,675,0],[772,20,340,10,530,10,558,15]]
+};
+const MONTHS = Object.keys(RAW);
+const ROWS = [];
+MONTHS.forEach(m => RAW[m].forEach((r, p) => CHANNELS.forEach((_, c) => {
+  const qty = r[c * 2], disc = r[c * 2 + 1], list = qty * PRICES[p];
+  ROWS.push({ m, p, c, qty, disc, list, sales: Math.round(list * (100 - disc) / 100) });
+})));
+
+const sel = { m: new Set(), p: new Set(), c: new Set() };
+let stackBy = "product";
+let sortKey = "m", sortDir = 1;
+
+const won = v => v.toLocaleString("ko-KR") + "원";
+const eok = v => v >= 1e8 ? (v / 1e8).toFixed(2) + "억원" : Math.round(v / 1e4).toLocaleString("ko-KR") + "만원";
+const mlabel = m => Number(m.slice(5)) + "월";
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const palette = () => ["--c1", "--c2", "--c3", "--c4", "--c5"].map(css);
+
+function filtered(skip = "") {
+  return ROWS.filter(r =>
+    (skip.includes("m") || !sel.m.size || sel.m.has(r.m)) &&
+    (skip.includes("p") || !sel.p.size || sel.p.has(r.p)) &&
+    (skip.includes("c") || !sel.c.size || sel.c.has(r.c)));
+}
+function sum(rows, k) { return rows.reduce((a, r) => a + r[k], 0); }
+function toggle(key, val) { sel[key].has(val) ? sel[key].delete(val) : sel[key].add(val); render(); }
+function only(key, val) {
+  if (sel[key].size === 1 && sel[key].has(val)) sel[key].clear(); else { sel[key].clear(); sel[key].add(val); }
+  render();
+}
+
+function buildChips(id, key, items, label) {
+  const box = document.getElementById(id);
+  box.innerHTML = "";
+  const all = document.createElement("button");
+  all.className = "chip all" + (sel[key].size ? "" : " on");
+  all.textContent = "전체";
+  all.onclick = () => { sel[key].clear(); render(); };
+  box.appendChild(all);
+  items.forEach((it, i) => {
+    const v = key === "m" ? it : i;
+    const b = document.createElement("button");
+    b.className = "chip" + (sel[key].has(v) ? " on" : "");
+    b.textContent = label(it);
+    b.setAttribute("aria-pressed", sel[key].has(v));
+    b.onclick = () => toggle(key, v);
+    box.appendChild(b);
+  });
+}
+
+Chart.defaults.font.family = '"Noto Sans KR", system-ui, sans-serif';
+const charts = {};
+function axisOpts() {
+  return {
+    grid: { color: css("--grid") }, border: { display: false },
+    ticks: { color: css("--muted"), callback: v => v >= 1e8 ? (v / 1e8) + "억" : v >= 1e4 ? (v / 1e4).toLocaleString() + "만" : v }
+  };
+}
+function tip() { return { callbacks: { label: c => ` ${c.dataset.label || c.label}: ${won(c.raw)}` } }; }
+
+function renderMonth() {
+  const rows = filtered("m");
+  const groups = stackBy === "product" ? PRODUCTS : CHANNELS;
+  const gk = stackBy === "product" ? "p" : "c";
+  const pal = palette();
+  const datasets = groups.map((g, gi) => ({
+    label: g,
+    data: MONTHS.map(m => sum(rows.filter(r => r.m === m && r[gk] === gi), "sales")),
+    backgroundColor: MONTHS.map(m => sel.m.size && !sel.m.has(m) ? pal[gi] + "40" : pal[gi]),
+    borderRadius: 2, hidden: !!(sel[gk].size && !sel[gk].has(gi))
+  }));
+  const cfg = {
+    type: "bar",
+    data: { labels: MONTHS.map(mlabel), datasets },
+    options: {
+      maintainAspectRatio: false, animation: { duration: 250 },
+      scales: { x: { stacked: true, grid: { display: false }, ticks: { color: css("--muted") } }, y: { stacked: true, ...axisOpts() } },
+      plugins: { legend: { position: "bottom", labels: { color: css("--text"), boxWidth: 10, boxHeight: 10 } },
+        tooltip: { mode: "index", ...tip(), footer: { } } },
+      onClick: (e, els) => { if (els.length) only("m", MONTHS[els[0].index]); }
+    }
+  };
+  cfg.options.plugins.tooltip.callbacks.footer = items => "합계: " + won(items.reduce((a, i) => a + i.raw, 0));
+  draw("ch-month", cfg);
+}
+
+function renderChannel() {
+  const rows = filtered("c");
+  const pal = palette();
+  const data = CHANNELS.map((_, i) => sum(rows.filter(r => r.c === i), "sales"));
+  draw("ch-channel", {
+    type: "doughnut",
+    data: { labels: CHANNELS, datasets: [{ data,
+      backgroundColor: CHANNELS.map((_, i) => sel.c.size && !sel.c.has(i) ? pal[i] + "40" : pal[i]),
+      borderColor: css("--surface"), borderWidth: 2 }] },
+    options: {
+      maintainAspectRatio: false, cutout: "58%", animation: { duration: 250 },
+      plugins: { legend: { position: "bottom", labels: { color: css("--text"), boxWidth: 10, boxHeight: 10 } },
+        tooltip: { callbacks: { label: c => {
+          const t = c.dataset.data.reduce((a, b) => a + b, 0);
+          return ` ${c.label}: ${won(c.raw)} (${(c.raw / t * 100).toFixed(1)}%)`; } } } },
+      onClick: (e, els) => { if (els.length) only("c", els[0].index); }
+    }
+  });
+}
+
+function renderProduct() {
+  const rows = filtered("p");
+  const pal = palette();
+  const data = PRODUCTS.map((_, i) => sum(rows.filter(r => r.p === i), "sales"));
+  draw("ch-product", {
+    type: "bar",
+    data: { labels: PRODUCTS, datasets: [{ label: "매출", data,
+      backgroundColor: PRODUCTS.map((_, i) => sel.p.size && !sel.p.has(i) ? pal[i] + "40" : pal[i]), borderRadius: 3 }] },
+    options: {
+      indexAxis: "y", maintainAspectRatio: false, animation: { duration: 250 },
+      scales: { x: axisOpts(), y: { grid: { display: false }, ticks: { color: css("--text") } } },
+      plugins: { legend: { display: false }, tooltip: tip() },
+      onClick: (e, els) => { if (els.length) only("p", els[0].index); }
+    }
+  });
+}
+
+function draw(id, cfg) {
+  if (charts[id]) charts[id].destroy();
+  const cv = document.getElementById(id);
+  cfg.options.onHover = (e, els) => { cv.style.cursor = els.length ? "pointer" : "default"; };
+  charts[id] = new Chart(cv, cfg);
+}
+
+function renderHeat() {
+  const rows = filtered("pc");
+  const cell = (p, c) => sum(rows.filter(r => r.p === p && r.c === c), "sales");
+  const vals = PRODUCTS.flatMap((_, p) => CHANNELS.map((_, c) => cell(p, c)));
+  const max = Math.max(...vals, 1);
+  const rgb = css("--heat");
+  let h = "<thead><tr><th>제품</th>" + CHANNELS.map(c => `<th>${c}</th>`).join("") + "<th>합계</th></tr></thead><tbody>";
+  PRODUCTS.forEach((pn, p) => {
+    let tot = 0;
+    h += `<tr><td>${pn}</td>`;
+    CHANNELS.forEach((_, c) => {
+      const v = cell(p, c); tot += v;
+      const a = (0.08 + 0.72 * v / max).toFixed(2);
+      const act = (!sel.p.size || sel.p.has(p)) && (!sel.c.size || sel.c.has(c));
+      const fg = a > 0.5 ? "#fff" : "inherit";
+      h += `<td class="cell" data-p="${p}" data-c="${c}" title="${pn} · ${CHANNELS[c]}: ${won(v)}"
+        style="background:rgba(${rgb},${act ? a : 0.04});color:${act ? fg : "var(--muted)"}">${(v / 1e6).toFixed(1)}</td>`;
+    });
+    h += `<td><b>${(tot / 1e6).toFixed(1)}</b></td></tr>`;
+  });
+  h += "</tbody>";
+  const t = document.getElementById("heat");
+  t.innerHTML = h;
+  t.querySelectorAll("td.cell").forEach(td => td.onclick = () => {
+    const p = +td.dataset.p, c = +td.dataset.c;
+    const same = sel.p.size === 1 && sel.p.has(p) && sel.c.size === 1 && sel.c.has(c);
+    sel.p.clear(); sel.c.clear();
+    if (!same) { sel.p.add(p); sel.c.add(c); }
+    render();
+  });
+}
+
+function renderKpis() {
+  const rows = filtered();
+  const s = sum(rows, "sales"), q = sum(rows, "qty"), l = sum(rows, "list");
+  document.getElementById("k-sales").textContent = eok(s);
+  document.getElementById("k-sales-d").textContent = won(s);
+  document.getElementById("k-qty").textContent = q.toLocaleString("ko-KR") + "개";
+  const months = new Set(rows.map(r => r.m)).size;
+  document.getElementById("k-qty-d").textContent = months ? `월평균 ${Math.round(q / months).toLocaleString("ko-KR")}개` : "";
+  document.getElementById("k-asp").textContent = q ? won(Math.round(s / q)) : "-";
+  document.getElementById("k-disc").textContent = l ? ((1 - s / l) * 100).toFixed(1) + "%" : "-";
+}
+
+const COLS = [
+  ["m", "월", r => mlabel(r.m)], ["p", "제품", r => PRODUCTS[r.p]], ["c", "채널", r => CHANNELS[r.c]],
+  ["qty", "판매수량", r => r.qty.toLocaleString("ko-KR")], ["price", "정가", r => PRICES[r.p].toLocaleString("ko-KR")],
+  ["disc", "할인율", r => r.disc + "%"], ["sales", "매출(원)", r => r.sales.toLocaleString("ko-KR")]
+];
+function renderDetail() {
+  const rows = filtered().slice();
+  const val = r => sortKey === "price" ? PRICES[r.p] : r[sortKey];
+  rows.sort((a, b) => (val(a) > val(b) ? 1 : val(a) < val(b) ? -1 : 0) * sortDir);
+  const arrow = k => k === sortKey ? (sortDir > 0 ? " ▲" : " ▼") : "";
+  let h = "<thead><tr>" + COLS.map(([k, n]) => `<th data-k="${k}">${n}${arrow(k)}</th>`).join("") + "</tr></thead><tbody>";
+  rows.forEach(r => { h += "<tr>" + COLS.map(([, , f]) => `<td>${f(r)}</td>`).join("") + "</tr>"; });
+  h += "</tbody>";
+  const t = document.getElementById("detail");
+  t.innerHTML = h;
+  t.querySelectorAll("th").forEach(th => th.onclick = () => {
+    const k = th.dataset.k;
+    if (k === sortKey) sortDir = -sortDir; else { sortKey = k; sortDir = k === "sales" || k === "qty" ? -1 : 1; }
+    renderDetail();
+  });
+  document.getElementById("rowcount").textContent = `${rows.length}건 · 머리글을 클릭하면 정렬`;
+}
+
+function render() {
+  buildChips("f-month", "m", MONTHS, mlabel);
+  buildChips("f-product", "p", PRODUCTS, x => x);
+  buildChips("f-channel", "c", CHANNELS, x => x);
+  renderKpis(); renderMonth(); renderChannel(); renderProduct(); renderHeat(); renderDetail();
+}
+
+document.getElementById("reset").onclick = () => { sel.m.clear(); sel.p.clear(); sel.c.clear(); render(); };
+document.querySelectorAll("#stackBy button").forEach(b => b.onclick = () => {
+  stackBy = b.dataset.v;
+  document.querySelectorAll("#stackBy button").forEach(x => x.classList.toggle("on", x === b));
+  renderMonth();
+});
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
+render();
+</script>
+</body>
+</html>
